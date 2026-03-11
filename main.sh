@@ -12,18 +12,7 @@ function install-apps {
 	done
 }
 
-function setup-aliases {
-	if [[ ! -f "~/.zshrc" ]]; then
-		touch ~/.zshrc
-	fi
-
-	COMMAND="source ~/Documents/configuration_apple_os/aliases.sh"
-	if ! grep -Fxq "$COMMAND" "~/.zshrc"; then
-		echo $COMMAND >>"~/.zshrc"
-	fi
-}
-
-function scripts {
+function setup-scripts {
 	for file in ~/Documents/configuration_apple_os/scripts/*sh; do
 		if [[ -f "$file" ]]; then
 			BF="$(basename "$file")"
@@ -36,10 +25,19 @@ function scripts {
 	done
 }
 
-function all-things {
-	install-apps
-	setup-aliases
-	scripts
+function setup-aliases {
+	if [[ ! -f "~/.zshrc" ]]; then
+		touch ~/.zshrc
+	fi
+
+	COMMAND="source ~/Documents/configuration_apple_os/aliases.sh"
+	if ! grep -Fxq "$COMMAND" "~/.zshrc"; then
+		echo $COMMAND >>"~/.zshrc"
+	fi
 }
 
-all-things
+install-apps
+setup-scripts
+setup-setup-aliases
+PROMPT="%F{yellow}%n@%m in %~ > %f"
+my-rpromt
