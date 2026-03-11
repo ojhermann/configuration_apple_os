@@ -23,9 +23,23 @@ function setup-aliases {
 	fi
 }
 
-function all_things {
-	install-apps
-	setup-aliases
+function scripts {
+	for file in ~/Documents/configuration_apple_os/scripts/*sh; do
+		if [[ -f "$file" ]]; then
+			BF="$(basename "$file")"
+			F=${BF%.sh}
+			P="/usr/bin/$F"
+			if [[ ! -e "$P" ]]; then
+				ln -s "$file" "/usr/bin/$F"
+			fi
+		fi
+	done
 }
 
-all_things
+function all-things {
+	install-apps
+	setup-aliases
+	scripts
+}
+
+all-things
