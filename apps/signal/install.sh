@@ -4,7 +4,7 @@ APP="proton"
 
 print -P "%F{green}%B$APP%b: starting to install $APP%f"
 
-if [[ ! -d "/Applications/Signal.app"]]; then
+if [[ ! -e "/Applications/Signal.app" ]]; then
 	brew install --cask signal
 fi
 
