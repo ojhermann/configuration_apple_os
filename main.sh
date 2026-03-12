@@ -19,7 +19,8 @@ function setup-scripts {
 			F=${BF%.sh}
 			P="/usr/bin/$F"
 			if [[ ! -e "$P" ]]; then
-				ln -s "$file" "/usr/bin/$F"
+				sudo ln -s "$file" "/usr/local/bin/$F"
+				chmod +x "/usr/local/bin/$F"
 			fi
 		fi
 	done
@@ -31,13 +32,22 @@ function setup-aliases {
 	fi
 
 	COMMAND="source ~/Documents/configuration_apple_os/aliases.sh"
-	if ! grep -Fxq "$COMMAND" "~/.zshrc"; then
-		echo $COMMAND >>"~/.zshrc"
+	if ! grep -Fxq "$COMMAND" ~/.zshrc; then
+		echo $COMMAND >>~/.zshrc
+	fi
+
+	PROMPT="%F{yellow}%n@%m in %~ > %f"
+	COMMAND="export PROMPT='$PROMPT'"
+	if ! grep -Fxq "$COMMAND" ~/.zshrc; then
+		echo $COMMAND >>~/.zshrc
+	fi
+
+	COMMAND="precmd() { RPROMPT=\$(my-rprompt) }"
+	if ! grep -Fxq "$COMMAND" ~/.zshrc; then
+		echo $COMMAND >>~/.zshrc
 	fi
 }
 
 install-apps
 setup-scripts
-setup-setup-aliases
-PROMPT="%F{yellow}%n@%m in %~ > %f"
-my-rpromt
+setup-aliases
