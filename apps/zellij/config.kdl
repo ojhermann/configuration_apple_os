@@ -1,6 +1,5 @@
-copy_command pbcopy
-default_shell zsh
-layout_dir ~/Documents/configuration_apple_os/apps/zellij/layout_dir
+copy_command "pbcopy"
+default_shell "zsh"
 show_start_up_tips false
-theme kanagawa
+theme "kanagawa"
 
