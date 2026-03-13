@@ -1,16 +1,18 @@
 layout {
-    cwd "~/Documents/configuration_apple_os"
-    tab name="main" focus=true hide_floating_panes=true {
+    tab name="basic" focus=true hide_floating_panes=true {
         pane size=1 borderless=true {
             plugin location="zellij:tab-bar"
         }
         pane split_direction="vertical" {
             pane command="watchexec" name="dir" size="20%" {
-                args "-c" "-i" "git/**" "gst"
+                args "-c" "--watch" "." "--watch" ".git/index" "--watch" ".git/HEAD" "--no-vcs-ignore" "-i" ".git/objects/**" "-i" ".git/logs/**" "gst"
                 start_suspended false
             }
             pane size="80%" {
-                pane command="hx" name="hx" size="65%" {
+                pane command="claude" name="claude" size="32%" {
+                    start_suspended false
+                }
+                pane command="hx" name="hx" size="32%" {
                     start_suspended false
                 }
                 pane name="zsh" focus=true size="35%" {
