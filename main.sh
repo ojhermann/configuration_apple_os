@@ -14,15 +14,11 @@ function install-apps {
 
 function setup-scripts {
 	for file in ~/Documents/configuration_apple_os/scripts/*sh; do
-		if [[ -f "$file" ]]; then
-			BF="$(basename "$file")"
-			F=${BF%.sh}
-			P="/usr/bin/$F"
-			if [[ ! -e "$P" ]]; then
-				sudo ln -s "$file" "/usr/local/bin/$F"
-				chmod +x "/usr/local/bin/$F"
-			fi
-		fi
+		BF="$(basename "$file")"
+		F=${BF%.sh}
+		P="/usr/bin/$F"
+		sudo ln -sf "$file" "/usr/local/bin/$F"
+		chmod +x "/usr/local/bin/$F"
 	done
 }
 
@@ -43,7 +39,7 @@ function setup-zsh {
 		echo $COMMAND >>~/.zshrc
 	fi
 
-	PROMPT="%F{yellow}%n@%m in %~ > %f"
+	PROMPT=$"%F{yellow}%n@%m \n %~ \n> %f"
 	COMMAND="export PROMPT='$PROMPT'"
 	if ! grep -Fxq "$COMMAND" ~/.zshrc; then
 		echo $COMMAND >>~/.zshrc
