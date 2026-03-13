@@ -39,13 +39,7 @@ function setup-zsh {
 		echo $COMMAND >>~/.zshrc
 	fi
 
-	PROMPT=$"%F{yellow}%n@%m \n %~ \n> %f"
-	COMMAND="export PROMPT='$PROMPT'"
-	if ! grep -Fxq "$COMMAND" ~/.zshrc; then
-		echo $COMMAND >>~/.zshrc
-	fi
-
-	COMMAND="precmd() { RPROMPT=\$(my-rprompt) }"
+	COMMAND="precmd() { PROMPT=\$(prompt) }"
 	if ! grep -Fxq "$COMMAND" ~/.zshrc; then
 		echo $COMMAND >>~/.zshrc
 	fi
