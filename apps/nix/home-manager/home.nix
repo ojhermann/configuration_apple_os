@@ -81,7 +81,7 @@ in
   #
   home.sessionVariables = {
     EDITOR = "hx";
-    VISUAL = $EDITOR;
+    VISUAL = config.home.sessionVariables.EDITOR;
   };
 
   # Let Home Manager install and manage itself.
