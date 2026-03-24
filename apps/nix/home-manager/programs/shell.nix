@@ -1,8 +1,8 @@
 { pkgs, lib, ... }:
 
 let
-  gst      = import ./shell/gst.nix       { inherit pkgs; };
-  watchDir = import ./shell/watch-dir.nix { inherit pkgs gst; };
+  gst      = import ../packages/gst.nix       { inherit pkgs; };
+  watchDir = import ../packages/watch-dir.nix { inherit pkgs gst; };
   newPyDir = pkgs.writeShellScriptBin "new-py-dir" (builtins.readFile ./shell/scripts/new-py-dir.sh);
   newZsh   = pkgs.writeShellScriptBin "new-zsh"    (builtins.readFile ./shell/scripts/new-zsh.sh);
   newBash  = pkgs.writeShellScriptBin "new-bash"   (builtins.readFile ./shell/scripts/new-bash.sh);
