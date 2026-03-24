@@ -1,7 +1,17 @@
 { pkgs, lib, ... }:
 
 let
-  gst        = pkgs.writeShellScriptBin "gst"        (builtins.readFile ./shell/scripts/gst.sh);
+  gst        = pkgs.writeShellApplication {
+    name = "gst";
+    runtimeInputs = [ pkgs.git pkgs.tree ];
+    text = ''
+      if git rev-parse --git-dir >/dev/null 2>&1; then
+        git status -sb && tree -aC -I '.git' --gitignore
+      else
+        tree -aC
+      fi
+    '';
+  };
   newPyDir   = pkgs.writeShellScriptBin "new-py-dir" (builtins.readFile ./shell/scripts/new-py-dir.sh);
   newZsh     = pkgs.writeShellScriptBin "new-zsh"    (builtins.readFile ./shell/scripts/new-zsh.sh);
   newBash    = pkgs.writeShellScriptBin "new-bash"   (builtins.readFile ./shell/scripts/new-bash.sh);
