@@ -1,10 +1,24 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
+let
+  username = "otto";
+  homeDirectoryApple = "/Users/${username}";
+  homeDirectoryLinux = "/home/${username}";
+  importAllNixFiles =
+    path:
+    let
+      files = lib.filesystem.listFilesRecursive path;
+      nixFiles = lib.lists.filter (file: lib.hasSuffix ".nix" file) files;
+    in
+    lib.lists.map import nixFiles;
+in
 {
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
-  home.username = "otto";
-  home.homeDirectory = "/Users/otto";
+  nixpkgs.config.allowUnfree = true;
+
+  home.username = username;
+  home.homeDirectory = if pkgs.stdenv.hostPlatform.isDarwin then homeDirectoryApple else homeDirectoryLinux;
+
+  imports = importAllNixFiles ./programs;
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -67,10 +81,17 @@
   #
   #  /etc/profiles/per-user/otto/etc/profile.d/hm-session-vars.sh
   #
+  home.sessionPath = [ "/opt/pel/formae/bin" ];
+
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    EDITOR = "hx";
+    VISUAL = config.home.sessionVariables.EDITOR;
   };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  manual.manpages.enable = false;
+  manual.html.enable = false;
+  manual.json.enable = false;
 }
