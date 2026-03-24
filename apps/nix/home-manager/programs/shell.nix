@@ -3,9 +3,21 @@
 let
   gst      = import ../packages/gst.nix       { inherit pkgs; };
   watchDir = import ../packages/watch-dir.nix { inherit pkgs gst; };
-  newPyDir = pkgs.writeShellScriptBin "new-py-dir" (builtins.readFile ./shell/scripts/new-py-dir.sh);
-  newZsh   = pkgs.writeShellScriptBin "new-zsh"    (builtins.readFile ./shell/scripts/new-zsh.sh);
-  newBash  = pkgs.writeShellScriptBin "new-bash"   (builtins.readFile ./shell/scripts/new-bash.sh);
+  newPyDir = pkgs.writeShellApplication {
+    name = "new-py-dir";
+    runtimeInputs = [ pkgs.coreutils ];
+    text = builtins.readFile ./shell/scripts/new-py-dir.sh;
+  };
+  newZsh = pkgs.writeShellApplication {
+    name = "new-zsh";
+    runtimeInputs = [ pkgs.coreutils ];
+    text = builtins.readFile ./shell/scripts/new-zsh.sh;
+  };
+  newBash = pkgs.writeShellApplication {
+    name = "new-bash";
+    runtimeInputs = [ pkgs.coreutils ];
+    text = builtins.readFile ./shell/scripts/new-bash.sh;
+  };
 
   commonAliases = {
     date = "date +'%Y-%m-%d %H:%M:%S'";
