@@ -1,31 +1,11 @@
 { pkgs, lib, ... }:
 
 let
-  gst        = pkgs.writeShellApplication {
-    name = "gst";
-    runtimeInputs = [ pkgs.git pkgs.tree ];
-    text = ''
-      if git rev-parse --git-dir >/dev/null 2>&1; then
-        git status -sb && tree -aC -I '.git' --gitignore
-      else
-        tree -aC
-      fi
-    '';
-  };
-  newPyDir   = pkgs.writeShellScriptBin "new-py-dir" (builtins.readFile ./shell/scripts/new-py-dir.sh);
-  newZsh     = pkgs.writeShellScriptBin "new-zsh"    (builtins.readFile ./shell/scripts/new-zsh.sh);
-  newBash    = pkgs.writeShellScriptBin "new-bash"   (builtins.readFile ./shell/scripts/new-bash.sh);
-  watchDir   = pkgs.writeShellApplication {
-    name = "watch-dir";
-    runtimeInputs = [ pkgs.git pkgs.watchexec gst ];
-    text = ''
-      if git rev-parse --git-dir >/dev/null 2>&1; then
-        watchexec -c --watch "." --watch ".git/index" --watch ".git/HEAD" "--no-vcs-ignore" -i ".git/objects/**" -i ".git/logs/**" -- ${gst}/bin/gst
-      else
-        watchexec -c --watch "." -- ${gst}/bin/gst
-      fi
-    '';
-  };
+  gst      = import ./shell/gst.nix       { inherit pkgs; };
+  watchDir = import ./shell/watch-dir.nix { inherit pkgs gst; };
+  newPyDir = pkgs.writeShellScriptBin "new-py-dir" (builtins.readFile ./shell/scripts/new-py-dir.sh);
+  newZsh   = pkgs.writeShellScriptBin "new-zsh"    (builtins.readFile ./shell/scripts/new-zsh.sh);
+  newBash  = pkgs.writeShellScriptBin "new-bash"   (builtins.readFile ./shell/scripts/new-bash.sh);
 
   commonAliases = {
     date = "date +'%Y-%m-%d %H:%M:%S'";
