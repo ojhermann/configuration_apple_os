@@ -5,7 +5,17 @@ let
   newPyDir   = pkgs.writeShellScriptBin "new-py-dir" (builtins.readFile ./shell/scripts/new-py-dir.sh);
   newZsh     = pkgs.writeShellScriptBin "new-zsh"    (builtins.readFile ./shell/scripts/new-zsh.sh);
   newBash    = pkgs.writeShellScriptBin "new-bash"   (builtins.readFile ./shell/scripts/new-bash.sh);
-  watchDir   = pkgs.writeShellScriptBin "watch-dir"  (builtins.readFile ./shell/scripts/watch-dir.sh);
+  watchDir   = pkgs.writeShellApplication {
+    name = "watch-dir";
+    runtimeInputs = [ pkgs.git pkgs.watchexec gst ];
+    text = ''
+      if git rev-parse --git-dir >/dev/null 2>&1; then
+        watchexec -c --watch "." --watch ".git/index" --watch ".git/HEAD" "--no-vcs-ignore" -i ".git/objects/**" -i ".git/logs/**" -- gst
+      else
+        watchexec -c --watch "." -- gst
+      fi
+    '';
+  };
 
   commonAliases = {
     date = "date +'%Y-%m-%d %H:%M:%S'";
